@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CANOPY - Animal Inventory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#1f7a63",
+                    "background-light": "#f6f8f7",
+                    "background-dark": "#131f1c",
+                },
+                fontFamily: { "display": ["Inter", "sans-serif"] },
+                borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+            },
+        },
+    }
+</script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 transition-colors duration-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/10 px-6 py-4 lg:px-20 bg-white dark:bg-slate-900/50">
+<div class="flex items-center gap-8">
+<a href="index.html" class="flex items-center gap-3 text-primary">
+<div class="size-8 flex items-center justify-center bg-primary text-white rounded-lg">
+<span class="material-symbols-outlined text-xl">forest</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-black leading-tight tracking-tight">CANOPY</h2>
+</a>
+</div>
+<div class="hidden md:flex flex-1 max-w-md mx-8">
+<label class="flex flex-col w-full h-10">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-primary/5 dark:bg-primary/10 border border-primary/10">
+<div class="text-primary flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input id="search-input" class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:outline-0 focus:ring-0 h-full placeholder:text-primary/50 px-4 text-base font-normal" placeholder="Search animals by name or species..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex gap-3">
+<a href="index.html" class="flex items-center justify-center rounded-xl size-10 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">home</span>
+</a>
+<a href="stats.html" class="flex items-center justify-center rounded-xl size-10 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">bar_chart</span>
+</a>
+<a id="admin-nav-btn" href="admin-login.html" class="flex items-center justify-center rounded-xl size-10 bg-primary text-white hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">person</span>
+</a>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-8 px-6 lg:px-20">
+<div class="layout-content-container flex flex-col max-w-[1200px] flex-1 gap-6">
+<div class="flex flex-wrap items-end justify-between gap-4">
+<div class="flex flex-col gap-2">
+<h1 class="text-slate-900 dark:text-slate-100 text-4xl font-black leading-tight tracking-tight">Animal Inventory</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal">Global tracking and management system for all wildlife reserves.</p>
+</div>
+<a href="add-animal.html" id="add-animal-btn" class="hidden items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:shadow-lg transition-all">
+<span class="material-symbols-outlined">add</span>
+<span>Add New Animal</span>
+</a>
+</div>
+<!-- Filter bar -->
+<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<button class="filter-btn active flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary text-white px-5 text-sm font-semibold" data-filter="all">
+<span class="material-symbols-outlined text-lg">apps</span> All Species
+</button>
+<button class="filter-btn flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-primary/10 px-5 text-sm font-medium hover:bg-primary/5" data-filter="Panthera">
+<span class="material-symbols-outlined text-lg">pets</span> Big Cats
+</button>
+<button class="filter-btn flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-primary/10 px-5 text-sm font-medium hover:bg-primary/5" data-filter="Elephas">
+<span class="material-symbols-outlined text-lg">landscape</span> Elephants
+</button>
+<button class="filter-btn flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-primary/10 px-5 text-sm font-medium hover:bg-primary/5" data-filter="Ursus">
+<span class="material-symbols-outlined text-lg">ac_unit</span> Bears
+</button>
+</div>
+<!-- Table -->
+<div class="w-full">
+<div class="overflow-hidden rounded-xl border border-primary/10 bg-white dark:bg-slate-900 shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-primary/5 dark:bg-primary/20 border-b border-primary/10">
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Animal ID</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Name</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Species</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Enclosure</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Count</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Last Updated</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider text-right" id="action-header" style="display:none;">Action</th>
+</tr>
+</thead>
+<tbody id="animals-table" class="divide-y divide-primary/5">
+<tr><td colspan="7" class="px-6 py-12 text-center text-slate-500"><div class="loading-overlay"><div class="spinner"></div><span>Loading animals...</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-2">
+<p class="text-sm text-slate-500 dark:text-slate-400" id="animals-count">Showing 0 animals</p>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-primary/10 bg-white dark:bg-slate-900/50 py-8 px-6 lg:px-20">
+<div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-2 text-primary/60">
+<span class="material-symbols-outlined text-lg">copyright</span>
+<span class="text-sm font-medium">2024 CANOPY Wildlife Management System</span>
+</div>
+<div class="flex gap-6">
+<a class="text-sm text-slate-500 hover:text-primary" href="index.html">Home</a>
+<a class="text-sm text-slate-500 hover:text-primary" href="stats.html">Statistics</a>
+<a class="text-sm text-slate-500 hover:text-primary" href="admin-login.html">Admin</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+<script src="app.js"></script>
+<script>
+let allAnimals = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Show admin controls if logged in
+    if (isLoggedIn()) {
+        document.getElementById('add-animal-btn').style.display = 'flex';
+        document.getElementById('action-header').style.display = '';
+        document.getElementById('admin-nav-btn').href = 'dashboard.html';
+    }
+
+    await loadAnimals();
+
+    // Search
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        filterAndRender(e.target.value);
+    });
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active', 'bg-primary', 'text-white');
+                b.classList.add('bg-white', 'dark:bg-slate-800', 'border', 'border-primary/10');
+            });
+            btn.classList.add('active', 'bg-primary', 'text-white');
+            btn.classList.remove('bg-white', 'dark:bg-slate-800', 'border', 'border-primary/10');
+            filterAndRender(document.getElementById('search-input').value, btn.dataset.filter);
+        });
+    });
+});
+
+async function loadAnimals() {
+    try {
+        allAnimals = await getAnimals();
+        renderAnimals(allAnimals);
+    } catch (err) {
+        document.getElementById('animals-table').innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-slate-500">Failed to load animals. Server may be offline.</td></tr>';
+    }
+}
+
+function filterAndRender(search = '', speciesFilter = 'all') {
+    let filtered = allAnimals;
+    if (speciesFilter && speciesFilter !== 'all') {
+        filtered = filtered.filter(a => a.species.includes(speciesFilter));
+    }
+    if (search) {
+        const term = search.toLowerCase();
+        filtered = filtered.filter(a =>
+            a.animal_name.toLowerCase().includes(term) ||
+            a.species.toLowerCase().includes(term) ||
+            a.enclosure.toLowerCase().includes(term)
+        );
+    }
+    renderAnimals(filtered);
+}
+
+function renderAnimals(animals) {
+    const table = document.getElementById('animals-table');
+    const loggedIn = isLoggedIn();
+
+    if (animals.length === 0) {
+        table.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-slate-500">No animals found matching your criteria.</td></tr>';
+        document.getElementById('animals-count').textContent = 'Showing 0 animals';
+        return;
+    }
+
+    table.innerHTML = animals.map(animal => `
+        <tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group fade-in">
+            <td class="px-6 py-5 text-slate-500 dark:text-slate-400 font-mono text-sm">#A-${String(animal.id).padStart(4, '0')}</td>
+            <td class="px-6 py-5 font-semibold text-slate-900 dark:text-slate-100">${animal.animal_name}</td>
+            <td class="px-6 py-5">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                    ${animal.species}
+                </span>
+            </td>
+            <td class="px-6 py-5 text-slate-600 dark:text-slate-400">${animal.enclosure}</td>
+            <td class="px-6 py-5 text-slate-900 dark:text-slate-100 font-bold">${animal.count}</td>
+            <td class="px-6 py-5 text-slate-500 dark:text-slate-400 text-sm">${formatDate(animal.last_updated)}</td>
+            ${loggedIn ? `
+            <td class="px-6 py-5 text-right">
+                <button onclick="deleteAnimalRow(${animal.id}, '${animal.animal_name}')" class="text-red-500 hover:text-red-700 font-bold text-sm inline-flex items-center gap-1 mr-3 transition-colors">
+                    <span class="material-symbols-outlined text-lg">delete</span>
+                </button>
+                <a href="update-animal.html?id=${animal.id}" class="text-primary hover:text-primary/70 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-[-4px] transition-transform">
+                    <span class="material-symbols-outlined text-lg">edit</span> Edit
+                </a>
+            </td>` : ''}
+        </tr>
+    `).join('');
+
+    document.getElementById('animals-count').textContent = `Showing ${animals.length} of ${allAnimals.length} animals`;
+}
+
+async function deleteAnimalRow(id, name) {
+    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+    try {
+        await deleteAnimal(id);
+        showToast(`${name} has been deleted`, 'success');
+        await loadAnimals();
+    } catch (err) {
+        showToast(err.message, 'error');
+    }
+}
+</script>
+</body></html>

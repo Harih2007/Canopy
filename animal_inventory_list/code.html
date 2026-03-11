@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f7a63",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#131f1c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>CANOPY - Animal Inventory</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 transition-colors duration-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/10 px-6 py-4 lg:px-20 bg-white dark:bg-slate-900/50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 flex items-center justify-center bg-primary text-white rounded-lg">
+<span class="material-symbols-outlined text-xl">forest</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-black leading-tight tracking-tight">CANOPY</h2>
+</div>
+</div>
+<div class="hidden md:flex flex-1 max-w-md mx-8">
+<label class="flex flex-col w-full h-10">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-primary/5 dark:bg-primary/10 border border-primary/10">
+<div class="text-primary flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:outline-0 focus:ring-0 h-full placeholder:text-primary/50 px-4 text-base font-normal" placeholder="Search animals by name or ID..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-xl size-10 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-xl size-10 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="flex items-center justify-center rounded-xl size-10 bg-primary text-white hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-8 px-6 lg:px-20">
+<div class="layout-content-container flex flex-col max-w-[1200px] flex-1 gap-6">
+<div class="flex flex-wrap items-end justify-between gap-4">
+<div class="flex flex-col gap-2">
+<h1 class="text-slate-900 dark:text-slate-100 text-4xl font-black leading-tight tracking-tight">Animal Inventory</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal">Global tracking and management system for all wildlife reserves.</p>
+</div>
+<button class="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:shadow-lg transition-all">
+<span class="material-symbols-outlined">add</span>
+<span>Add New Animal</span>
+</button>
+</div>
+<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary text-white px-5 text-sm font-semibold">
+<span class="material-symbols-outlined text-lg">apps</span>
+                            All Species
+                        </button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-primary/10 px-5 text-sm font-medium hover:bg-primary/5">
+<span class="material-symbols-outlined text-lg">pets</span>
+                            Mammals
+                        </button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-primary/10 px-5 text-sm font-medium hover:bg-primary/5">
+<span class="material-symbols-outlined text-lg">air</span>
+                            Avian
+                        </button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-primary/10 px-5 text-sm font-medium hover:bg-primary/5">
+<span class="material-symbols-outlined text-lg">water_drop</span>
+                            Marine
+                        </button>
+<div class="h-10 w-px bg-primary/10 mx-2"></div>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-primary/10 px-5 text-sm font-medium hover:bg-primary/5">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                            More Filters
+                        </button>
+</div>
+<div class="w-full @container">
+<div class="overflow-hidden rounded-xl border border-primary/10 bg-white dark:bg-slate-900 shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-primary/5 dark:bg-primary/20 border-b border-primary/10">
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Animal ID</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Name</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Species</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Enclosure</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Count</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Last Updated</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-primary/5">
+<!-- Row 1 -->
+<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 font-mono text-sm">#A-2034</td>
+<td class="px-6 py-5 font-semibold text-slate-900 dark:text-slate-100">Kodiak</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                                    Grizzly Bear
+                                                </span>
+</td>
+<td class="px-6 py-5 text-slate-600 dark:text-slate-400">North Forest (A-1)</td>
+<td class="px-6 py-5 text-slate-900 dark:text-slate-100 font-bold">2</td>
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 text-sm">Oct 24, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary hover:text-primary/70 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-[-4px] transition-transform">
+<span class="material-symbols-outlined text-lg">edit</span>
+                                                    Edit
+                                                </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 font-mono text-sm">#A-1102</td>
+<td class="px-6 py-5 font-semibold text-slate-900 dark:text-slate-100">Samba</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                                    African Lion
+                                                </span>
+</td>
+<td class="px-6 py-5 text-slate-600 dark:text-slate-400">Savanna Zone (S-4)</td>
+<td class="px-6 py-5 text-slate-900 dark:text-slate-100 font-bold">4</td>
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 text-sm">Oct 22, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary hover:text-primary/70 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-[-4px] transition-transform">
+<span class="material-symbols-outlined text-lg">edit</span>
+                                                    Edit
+                                                </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 font-mono text-sm">#A-3045</td>
+<td class="px-6 py-5 font-semibold text-slate-900 dark:text-slate-100">Echo</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                                    Bottlenose Dolphin
+                                                </span>
+</td>
+<td class="px-6 py-5 text-slate-600 dark:text-slate-400">Aquatic Center</td>
+<td class="px-6 py-5 text-slate-900 dark:text-slate-100 font-bold">6</td>
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 text-sm">Oct 25, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary hover:text-primary/70 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-[-4px] transition-transform">
+<span class="material-symbols-outlined text-lg">edit</span>
+                                                    Edit
+                                                </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 font-mono text-sm">#A-0982</td>
+<td class="px-6 py-5 font-semibold text-slate-900 dark:text-slate-100">Pip</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                                    Emperor Penguin
+                                                </span>
+</td>
+<td class="px-6 py-5 text-slate-600 dark:text-slate-400">Arctic Habitat</td>
+<td class="px-6 py-5 text-slate-900 dark:text-slate-100 font-bold">12</td>
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 text-sm">Oct 20, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary hover:text-primary/70 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-[-4px] transition-transform">
+<span class="material-symbols-outlined text-lg">edit</span>
+                                                    Edit
+                                                </button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 font-mono text-sm">#A-5521</td>
+<td class="px-6 py-5 font-semibold text-slate-900 dark:text-slate-100">Luna</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                                    Snow Leopard
+                                                </span>
+</td>
+<td class="px-6 py-5 text-slate-600 dark:text-slate-400">Mountain Range</td>
+<td class="px-6 py-5 text-slate-900 dark:text-slate-100 font-bold">1</td>
+<td class="px-6 py-5 text-slate-500 dark:text-slate-400 text-sm">Oct 21, 2023</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary hover:text-primary/70 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-[-4px] transition-transform">
+<span class="material-symbols-outlined text-lg">edit</span>
+                                                    Edit
+                                                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-2">
+<p class="text-sm text-slate-500 dark:text-slate-400">Showing 1-5 of 124 animals</p>
+<div class="flex items-center gap-1">
+<button class="flex size-10 items-center justify-center rounded-xl text-primary hover:bg-primary/10 disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="text-sm font-bold flex size-10 items-center justify-center text-white rounded-xl bg-primary">1</button>
+<button class="text-sm font-medium flex size-10 items-center justify-center text-slate-600 dark:text-slate-400 rounded-xl hover:bg-primary/10">2</button>
+<button class="text-sm font-medium flex size-10 items-center justify-center text-slate-600 dark:text-slate-400 rounded-xl hover:bg-primary/10">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="text-sm font-medium flex size-10 items-center justify-center text-slate-600 dark:text-slate-400 rounded-xl hover:bg-primary/10">25</button>
+<button class="flex size-10 items-center justify-center rounded-xl text-primary hover:bg-primary/10">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-primary/10 bg-white dark:bg-slate-900/50 py-8 px-6 lg:px-20">
+<div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-2 text-primary/60">
+<span class="material-symbols-outlined text-lg">copyright</span>
+<span class="text-sm font-medium">2024 CANOPY Wildlife Management System</span>
+</div>
+<div class="flex gap-6">
+<a class="text-sm text-slate-500 hover:text-primary" href="#">System Status</a>
+<a class="text-sm text-slate-500 hover:text-primary" href="#">Documentation</a>
+<a class="text-sm text-slate-500 hover:text-primary" href="#">Support</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

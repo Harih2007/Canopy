@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CANOPY | Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#1f7a63",
+                    "background-light": "#f6f8f7",
+                    "background-dark": "#131f1c",
+                },
+                fontFamily: { "display": ["Inter", "sans-serif"] },
+                borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+            },
+        },
+    }
+</script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-white dark:bg-background-dark border-r border-primary/10 flex flex-col shrink-0 hidden md:flex" id="sidebar">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">forest</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-primary font-bold text-xl leading-tight tracking-tight">CANOPY</h1>
+<p class="text-xs font-medium text-primary/60 uppercase tracking-widest">Management</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-white" href="dashboard.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors" href="animals.html">
+<span class="material-symbols-outlined">pets</span>
+<span class="font-medium">Animals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors" href="update-animal.html">
+<span class="material-symbols-outlined">history</span>
+<span class="font-medium">Update Count</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors" href="add-animal.html">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-medium">Add Animal</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors" href="stats.html">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium">Reports</span>
+</a>
+</nav>
+<div class="p-4 border-t border-primary/10">
+<button onclick="logout()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors w-full">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-y-auto">
+<!-- Header -->
+<header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-8 flex items-center justify-between sticky top-0 z-10">
+<div class="flex items-center gap-6 flex-1">
+<button class="md:hidden text-primary mr-2" onclick="document.getElementById('sidebar').classList.toggle('hidden')">
+    <span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="text-xl font-bold text-slate-800 dark:text-slate-100">Admin Dashboard</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3 pl-4 border-l border-primary/10">
+<div class="text-right">
+<p class="text-sm font-bold leading-tight" id="admin-name">Admin</p>
+<p class="text-xs text-primary font-medium">Administrator</p>
+</div>
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary border-2 border-primary/20">
+<span class="material-symbols-outlined">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-8 space-y-8 fade-in">
+<!-- Welcome Section -->
+<div>
+<h3 class="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">Sanctuary Overview</h3>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Real-time health and population monitoring.</p>
+</div>
+<!-- Stats Widgets -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="stats-widgets">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">pets</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Total Animals</p>
+<h4 class="text-3xl font-bold mt-1 tracking-tight" id="dash-total">--</h4>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">diversity_3</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Total Species</p>
+<h4 class="text-3xl font-bold mt-1 tracking-tight" id="dash-species">--</h4>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">update</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Total Records</p>
+<h4 class="text-3xl font-bold mt-1 tracking-tight" id="dash-records">--</h4>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">database</span>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-full pulse-dot">Active</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Database Status</p>
+<h4 class="text-3xl font-bold mt-1 tracking-tight">Online</h4>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Population Bar Chart -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-primary/5 shadow-md">
+<div class="flex items-center justify-between mb-8">
+<h5 class="text-lg font-bold">Population by Animal</h5>
+</div>
+<div class="h-64 flex items-end justify-between gap-3" id="pop-chart">
+</div>
+<div class="flex justify-between mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest" id="pop-labels">
+</div>
+</div>
+<!-- Enclosure Distribution Card -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-primary/5 shadow-md">
+<div class="flex items-center justify-between mb-8">
+<h5 class="text-lg font-bold">Enclosure Distribution</h5>
+</div>
+<div class="space-y-5" id="enclosure-chart">
+</div>
+</div>
+</div>
+<!-- Recent Activity Table -->
+<div class="bg-white dark:bg-slate-900 rounded-3xl border border-primary/5 shadow-md overflow-hidden">
+<div class="p-8 border-b border-primary/5 flex items-center justify-between">
+<h5 class="text-lg font-bold">Recent Updates</h5>
+<a href="animals.html" class="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold hover:bg-primary/90 transition-all">View All Animals</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-xs uppercase font-bold text-slate-400 tracking-widest bg-primary/5">
+<th class="px-8 py-4">Animal</th>
+<th class="px-8 py-4">Species</th>
+<th class="px-8 py-4">Enclosure</th>
+<th class="px-8 py-4">Count</th>
+<th class="px-8 py-4">Last Updated</th>
+</tr>
+</thead>
+<tbody id="recent-table" class="divide-y divide-primary/5">
+<tr><td colspan="5" class="px-8 py-12 text-center text-slate-500"><div class="loading-overlay"><div class="spinner"></div><span>Loading...</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script src="app.js"></script>
+<script>
+// Auth guard
+if (!requireAuth()) { /* redirects */ }
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const admin = getAdmin();
+    if (admin) {
+        document.getElementById('admin-name').textContent = admin.username;
+    }
+
+    try {
+        const animals = await getAnimals();
+        const totalCount = animals.reduce((sum, a) => sum + a.count, 0);
+        const uniqueSpecies = new Set(animals.map(a => a.species)).size;
+
+        document.getElementById('dash-total').textContent = totalCount.toLocaleString();
+        document.getElementById('dash-species').textContent = uniqueSpecies;
+        document.getElementById('dash-records').textContent = animals.length;
+
+        // Bar chart
+        const maxCount = Math.max(...animals.map(a => a.count));
+        const chart = document.getElementById('pop-chart');
+        const labels = document.getElementById('pop-labels');
+        chart.innerHTML = animals.map(a => {
+            const pct = (a.count / maxCount) * 100;
+            return `<div class="w-full bg-primary/10 rounded-t-lg relative group transition-all duration-300 hover:bg-primary/30" style="height: ${pct}%;">
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-800 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap">${a.animal_name}: ${a.count}</div>
+            </div>`;
+        }).join('');
+        labels.innerHTML = animals.map(a => `<span class="truncate text-center" style="max-width: ${100/animals.length}%">${a.animal_name.substring(0,4)}</span>`).join('');
+
+        // Enclosure distribution
+        const enclosures = {};
+        animals.forEach(a => { enclosures[a.enclosure] = (enclosures[a.enclosure] || 0) + a.count; });
+        const totalPop = totalCount || 1;
+        const colors = ['bg-primary', 'bg-primary/60', 'bg-primary/30', 'bg-yellow-500', 'bg-accent', 'bg-slate-400', 'bg-primary/20'];
+        const encChart = document.getElementById('enclosure-chart');
+        encChart.innerHTML = Object.entries(enclosures).map(([name, count], i) => {
+            const pct = Math.round((count / totalPop) * 100);
+            return `<div>
+                <div class="flex justify-between mb-2 text-sm font-medium"><span>${name}</span><span class="text-primary">${pct}%</span></div>
+                <div class="w-full bg-primary/5 h-3 rounded-full"><div class="${colors[i % colors.length]} h-full rounded-full transition-all duration-1000" style="width: ${pct}%"></div></div>
+            </div>`;
+        }).join('');
+
+        // Recent table
+        const recent = animals.slice(0, 5);
+        const table = document.getElementById('recent-table');
+        table.innerHTML = recent.map(a => `
+            <tr>
+                <td class="px-8 py-5">
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-lg bg-cover bg-center border border-primary/10" style="background-image: url('${getAnimalImage(a.animal_name)}')"></div>
+                        <span class="font-bold">${a.animal_name}</span>
+                    </div>
+                </td>
+                <td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">${a.species}</td>
+                <td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">${a.enclosure}</td>
+                <td class="px-8 py-5 font-bold">${a.count}</td>
+                <td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">${formatDate(a.last_updated)}</td>
+            </tr>
+        `).join('');
+    } catch (err) {
+        console.error(err);
+        showToast('Failed to load dashboard data', 'error');
+    }
+});
+</script>
+</body></html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CANOPY | Wildlife Management Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f7a63",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#131f1c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-white dark:bg-background-dark border-r border-primary/10 flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">forest</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-primary font-bold text-xl leading-tight tracking-tight">CANOPY</h1>
+<p class="text-xs font-medium text-primary/60 uppercase tracking-widest">Management</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-white" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">pets</span>
+<span class="font-medium">Animals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-medium">Update Count</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-medium">Add Animal</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium">Reports</span>
+</a>
+</nav>
+<div class="p-4 border-t border-primary/10">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-y-auto">
+<!-- Header -->
+<header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-8 flex items-center justify-between sticky top-0 z-10">
+<div class="flex items-center gap-6 flex-1">
+<h2 class="text-xl font-bold text-slate-800 dark:text-slate-100">Admin Dashboard</h2>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full bg-background-light dark:bg-slate-800 border-none rounded-xl pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search database..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="size-10 rounded-xl bg-background-light dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-background-dark"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-primary/10">
+<div class="text-right">
+<p class="text-sm font-bold leading-tight">Sarah Miller</p>
+<p class="text-xs text-primary font-medium">Head Ranger</p>
+</div>
+<div class="size-10 rounded-full bg-primary/20 bg-cover bg-center border-2 border-primary/20" data-alt="Portrait of Sarah Miller Head Ranger" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDCdphF00HxIrG6UzZDNS1Z4ep066y10Lwepnq8pDCWMFfiGadIx2WthTyfd9z5sINg3I-JVDjs-tpUUJP-igWKL2kNQTfHGjf4wrFwc25WkvWRbLLy4Yg-aQ9-rTHN6YnhG7AOvljicXb2v2UXjiJa_s2sPy8XwXFS-Z-Da0vbRVRBiOAypSvtDyzarIe6aAp3KManC8XvGMmhzKwlorfgGU3wJQalNkyxoXHiebfPEmddKiEAfWDN13T9dNA9OHxqnUfjxoBWHxY')"></div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-8 space-y-8">
+<!-- Welcome Section -->
+<div>
+<h3 class="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">Sanctuary Overview</h3>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Real-time health and population monitoring for the South Sector.</p>
+</div>
+<!-- Stats Widgets -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">pets</span>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">+12%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Total Animals</p>
+<h4 class="text-3xl font-bold mt-1 tracking-tight">1,284</h4>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">diversity_3</span>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">+2%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Total Species</p>
+<h4 class="text-3xl font-bold mt-1 tracking-tight">42</h4>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">update</span>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-full">+5%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Recently Updated</p>
+<h4 class="text-3xl font-bold mt-1 tracking-tight">15 today</h4>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined">database</span>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-full">Active</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Database Status</p>
+<h4 class="text-3xl font-bold mt-1 tracking-tight">Online</h4>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Historical Population Data Card -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-primary/5 shadow-md">
+<div class="flex items-center justify-between mb-8">
+<h5 class="text-lg font-bold">Historical Population Data</h5>
+<button class="text-primary text-sm font-semibold flex items-center gap-1">
+                                Monthly <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<div class="h-64 flex items-end justify-between gap-4">
+<div class="w-full bg-primary/10 rounded-t-lg relative group transition-all duration-300 hover:bg-primary/30" style="height: 40%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-800 text-white text-[10px] px-2 py-1 rounded">420</div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group transition-all duration-300 hover:bg-primary/30" style="height: 55%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-800 text-white text-[10px] px-2 py-1 rounded">580</div>
+</div>
+<div class="w-full bg-primary rounded-t-lg relative group" style="height: 75%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-800 text-white text-[10px] px-2 py-1 rounded">910</div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group transition-all duration-300 hover:bg-primary/30" style="height: 45%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-800 text-white text-[10px] px-2 py-1 rounded">510</div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group transition-all duration-300 hover:bg-primary/30" style="height: 90%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-800 text-white text-[10px] px-2 py-1 rounded">1240</div>
+</div>
+<div class="w-full bg-primary/10 rounded-t-lg relative group transition-all duration-300 hover:bg-primary/30" style="height: 65%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-800 text-white text-[10px] px-2 py-1 rounded">820</div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+</div>
+</div>
+<!-- Enclosure Distribution Card -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-primary/5 shadow-md">
+<div class="flex items-center justify-between mb-8">
+<h5 class="text-lg font-bold">Enclosure Distribution</h5>
+<button class="p-2 bg-background-light dark:bg-slate-800 rounded-lg material-symbols-outlined">more_horiz</button>
+</div>
+<div class="flex items-center gap-10">
+<!-- Circular Graphic -->
+<div class="relative size-48 flex items-center justify-center">
+<svg class="size-full transform -rotate-90">
+<circle class="text-primary/10" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="553" stroke-dashoffset="150" stroke-linecap="round" stroke-width="12"></circle>
+<circle class="text-primary/40" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="553" stroke-dashoffset="400" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-black">42</span>
+<span class="text-[10px] uppercase font-bold text-slate-400">Species</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex-1 space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-primary"></span>
+<span class="text-sm font-medium">Wetlands</span>
+</div>
+<span class="text-sm font-bold">45%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-primary/40"></span>
+<span class="text-sm font-medium">Rainforest</span>
+</div>
+<span class="text-sm font-bold">30%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-primary/10"></span>
+<span class="text-sm font-medium">Savanna</span>
+</div>
+<span class="text-sm font-bold">25%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Table -->
+<div class="bg-white dark:bg-slate-900 rounded-3xl border border-primary/5 shadow-md overflow-hidden">
+<div class="p-8 border-b border-primary/5 flex items-center justify-between">
+<h5 class="text-lg font-bold">Recent Updates</h5>
+<button class="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold">View All Activity</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="text-xs uppercase font-bold text-slate-400 tracking-widest bg-primary/5">
+<th class="px-8 py-4">Animal</th>
+<th class="px-8 py-4">Species</th>
+<th class="px-8 py-4">Enclosure</th>
+<th class="px-8 py-4">Last Checked</th>
+<th class="px-8 py-4">Health Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-primary/5">
+<tr>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cover bg-center" data-alt="Portrait of a Bengal Tiger" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVyL7VKax_bWf8213seFVT0LLLxslgzqv73buM6TRJbIEjx40H5PPj-kjLDMz3SSpTn7MoJxnXawomC4QNAvHz6yMZpVem1BmNtl-yrJdZ_gAhPfTVDcq_0bj04GM6AU8SCRmz2YKh0jDkeqP7r6j9ZdYhrKa8ZgFiWGOyJnOVfZXeL13f9w4rsVbF7VJXMLU_9yEAOWa39AsPFSogtxmMkjREjPkreqpVnU0ElAyuvqTcXOYKDxbjpNzsISSK4yFSeESoOHG3eak')"></div>
+<span class="font-bold">Rajah</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">Bengal Tiger</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">Forest North</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">2h ago</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Optimal</span>
+</td>
+</tr>
+<tr>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cover bg-center" data-alt="Portrait of an African Lion" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqMnXlNcMb7YWQAgTz78rzSPeanq2flPkGix9QAIouXabrObkerjRycGgz9OTKMf_qeNPFAqLVTIt8vxVgKkyTFjTb6V7ql8gu9HFjWr9TwalDcdmfUCvUryCCM0n8aXqOP1PpTEf0n7sDOXYngaHLpbdAKeWjGQTHQhyckvI44ZhUCp4rWq5DRy87Wwsxt_7L1E4-rRU4VqbSvtiLoRGJzGT0GeNHEyjEa_4tAoRy6hA9F7vsloePXr5NDgQE_vZwzejwUNQ3YTw')"></div>
+<span class="font-bold">Leo</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">African Lion</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">Savanna East</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">5h ago</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full">Observation</span>
+</td>
+</tr>
+<tr>
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cover bg-center" data-alt="Portrait of a Macaw Parrot" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCE2qGCv2fQg5nehZJptYrPDAuEON6hlMo0puKD33OCj8EEFytyc-g1RKuuL3oA83d_oR37xZ8Xs-WPEHZfsZ0tMfaarmHC0ZbN77sgcCwX32-9TccOLcXXff_KhZJhH_jULZjlpokdPaf2H8MKsMT8bYtVEHAw-CALCpHX1O7H3LgLoGDUUs2SxuWB3HiUMIq-QE0lig2hkLwVhTCqvVfCyESUeDaL7LBVeP1QYo1XgxAZ-E2WeGILByTsDAweRlPOeOPbABUDKYc')"></div>
+<span class="font-bold">Rio</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">Scarlet Macaw</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">Aviary A</td>
+<td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">10m ago</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Optimal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
