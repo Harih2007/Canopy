@@ -83,10 +83,12 @@ async function updateAnimal(id, animalData) {
     });
 }
 
-async function updateAnimalCount(id, count) {
+async function updateAnimalCount(id, count, image_url) {
+    const body = { count };
+    if (image_url !== undefined) body.image_url = image_url;
     return apiFetch(`/animals/update-count/${id}`, {
         method: 'PUT',
-        body: JSON.stringify({ count })
+        body: JSON.stringify(body)
     });
 }
 
@@ -146,17 +148,11 @@ function formatDate(dateStr) {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-function getAnimalImage(animalName) {
-    const images = {
-        'Lion': 'https://lh3.googleusercontent.com/aida-public/AB6AXuDqMnXlNcMb7YWQAgTz78rzSPeanq2flPkGix9QAIouXabrObkerjRycGgz9OTKMf_qeNPFAqLVTIt8vxVgKkyTFjTb6V7ql8gu9HFjWr9TwalDcdmfUCvUryCCM0n8aXqOP1PpTEf0n7sDOXYngaHLpbdAKeWjGQTHQhyckvI44ZhUCp4rWq5DRy87Wwsxt_7L1E4-rRU4VqbSvtiLoRGJzGT0GeNHEyjEa_4tAoRy6hA9F7vsloePXr5NDgQE_vZwzejwUNQ3YTw',
-        'Tiger': 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVyL7VKax_bWf8213seFVT0LLLxslgzqv73buM6TRJbIEjx40H5PPj-kjLDMz3SSpTn7MoJxnXawomC4QNAvHz6yMZpVem1BmNtl-yrJdZ_gAhPfTVDcq_0bj04GM6AU8SCRmz2YKh0jDkeqP7r6j9ZdYhrKa8ZgFiWGOyJnOVfZXeL13f9w4rsVbF7VJXMLU_9yEAOWa39AsPFSogtxmMkjREjPkreqpVnU0ElAyuvqTcXOYKDxbjpNzsISSK4yFSeESoOHG3eak',
-        'Elephant': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTZ_vSZ_8OAwLjZlNSr1d0XMVYE8fcumHKKrT2CvonAo8l8Xl39BgTRlclit46kO38NMzCCKgKvtM9RJ6jAu88ObkCMufMHr3VGDcH3vFQ1WRHB9jdr0QhVJMbRVRxWmVesR3zhciqhQRgewWi0lkvzLqcUsb6-eGz6dKloLuRfUbjoAgkAl6FZiIA6_0ekhWP4O-f5bj53hPdj1y0rIdR78BwmSrMEfyJsbKlpIpJp9xXV0u0sj1sSa4l21KQHNrQUXdOeztZ0cY',
-        'Zebra': 'https://lh3.googleusercontent.com/aida-public/AB6AXuBpEyOY2PdVwCRIDA36EXVCJfnqVcAxezDSfySu3a2_-L-7RmV7mfXLvksknrDrMY1go-tqVGV6Sghl9fp1lddGvwuwMHMLI-puHAfyuSYCZAtuMcPbU2Fe7m3-vhyvet981G5FWS876NyxEG6IAwunOq_DGVJAjCuyqz4mVSWVBWROUZLHjI_L_Cm_XGt_SNip3A961hNeJasZcBThEnya3CFju2_j5O5SBXn7Z9S0B-9mvbyB_iXKe50uICyEurJ9gJbqDN7gqVA',
-        'Giraffe': 'https://lh3.googleusercontent.com/aida-public/AB6AXuBpEyOY2PdVwCRIDA36EXVCJfnqVcAxezDSfySu3a2_-L-7RmV7mfXLvksknrDrMY1go-tqVGV6Sghl9fp1lddGvwuwMHMLI-puHAfyuSYCZAtuMcPbU2Fe7m3-vhyvet981G5FWS876NyxEG6IAwunOq_DGVJAjCuyqz4mVSWVBWROUZLHjI_L_Cm_XGt_SNip3A961hNeJasZcBThEnya3CFju2_j5O5SBXn7Z9S0B-9mvbyB_iXKe50uICyEurJ9gJbqDN7gqVA',
-        'Bear': 'https://lh3.googleusercontent.com/aida-public/AB6AXuDaZ5qeKsipGE6N5uIrfvRzuUx9yrdmnKt2d_DhR0JcwgyLDul6rmN7FXdO0EY-vKjgA07Uc5y2lXJMTp2-SPUK9mkS6z0zy_v19xxAa27eJix2q9Ugt-EVXZLOelxkmwF3xOgTb2CGec1WOm_8gylypYL1Ct-iAZhM8UatRNLnRwGa-BdogPZQCmj06ZtD7iz3hAaXnJmI8t3iYhrwP2QtMQRaqdqCmE9tOEPkGwKJLrn-JXVil9KGoGcV40sidoumEvP-eZDv3fk',
-        'Monkey': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCE2qGCv2fQg5nehZJptYrPDAuEON6hlMo0puKD33OCj8EEFytyc-g1RKuuL3oA83d_oR37xZ8Xs-WPEHZfsZ0tMfaarmHC0ZbN77sgcCwX32-9TccOLcXXff_KhZJhH_jULZjlpokdPaf2H8MKsMT8bYtVEHAw-CALCpHX1O7H3LgLoGDUUs2SxuWB3HiUMIq-QE0lig2hkLwVhTCqvVfCyESUeDaL7LBVeP1QYo1XgxAZ-E2WeGILByTsDAweRlPOeOPbABUDKYc'
-    };
-    return images[animalName] || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAL7tXMCJjbEGHnU-UOfH6X3GTVsncs8YLWci2h3WR3XzhTyOGlXcanqBAikF0utx20UCEpi428PoNHGAaymAjg84mLmMlW2TppQORNd1bM_fVlwMAfUbmQ_xaC4FMFDGwK2VoUGk8cOZ8FYqIp9_ut39fLWeLn8aQxBH3Lc3q6N8ufkssrHArcoBXALDicbxKVBTdyzZRVsl7u03qDS5L_6U3msTs1yb88nCFZpgebIVFH_U_m8shIRM6mkB6KsRTzhZgYx4QNZS0';
+// Dynamic image generation — uses custom image_url if provided, otherwise fetches from loremflickr
+function getAnimalImage(animalName, imageUrl) {
+    if (imageUrl && imageUrl.length > 0) return imageUrl;
+    const slug = animalName.toLowerCase().replace(/\s+/g, '-');
+    return `https://loremflickr.com/800/500/${slug}`;
 }
 
 function getStatusBadge(animalName) {

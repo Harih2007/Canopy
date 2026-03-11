@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="group flex flex-col gap-4 fade-in" style="animation-delay: ${i * 100}ms">
                 <div class="aspect-square w-full rounded-2xl overflow-hidden relative shadow-lg">
                     <img class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                         src="${getAnimalImage(animal.animal_name)}" 
+                         src="${getAnimalImage(animal.animal_name, animal.image_url)}" 
                          alt="${animal.animal_name}"/>
                     <div class="absolute top-3 right-3 bg-white/90 dark:bg-black/80 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-primary">${statuses[i % statuses.length]}</div>
                 </div>

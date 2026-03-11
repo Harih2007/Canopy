@@ -98,6 +98,17 @@
 </div>
 </div>
 
+<div class="space-y-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Image URL <span class="text-slate-400 font-normal">(optional)</span></label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined">image</span>
+</div>
+<input id="update-image-url" class="block w-full pl-11 pr-4 h-14 bg-background-light dark:bg-slate-800/50 border border-primary/10 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="https://example.com/photo.jpg" type="url"/>
+</div>
+<p class="text-xs text-slate-400 ml-1">Paste a direct image link to override the auto-fetched image. Leave empty for automatic.</p>
+</div>
+
 <button id="update-btn" class="w-full h-14 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
 <span class="material-symbols-outlined">save</span>
 <span>Update Count</span>
@@ -154,11 +165,12 @@ function showAnimalInfo(id) {
     const info = document.getElementById('animal-info');
     if (!animal) { info.classList.add('hidden'); return; }
     info.classList.remove('hidden');
-    document.getElementById('animal-preview-img').style.backgroundImage = `url('${getAnimalImage(animal.animal_name)}')`;
+    document.getElementById('animal-preview-img').style.backgroundImage = `url('${getAnimalImage(animal.animal_name, animal.image_url)}')`;
     document.getElementById('animal-preview-name').textContent = animal.animal_name;
     document.getElementById('animal-preview-species').textContent = animal.species + ' · ' + animal.enclosure;
     document.getElementById('animal-preview-count').textContent = animal.count;
     document.getElementById('new-count').value = animal.count;
+    document.getElementById('update-image-url').value = animal.image_url || '';
 }
 
 function renderRecentUpdates() {
@@ -166,7 +178,7 @@ function renderRecentUpdates() {
     document.getElementById('recent-updates').innerHTML = recent.map(a => `
         <div class="flex items-center justify-between px-6 py-4">
             <div class="flex items-center gap-3">
-                <div class="size-10 rounded-lg bg-cover bg-center border border-primary/10" style="background-image: url('${getAnimalImage(a.animal_name)}')"></div>
+                <div class="size-10 rounded-lg bg-cover bg-center border border-primary/10" style="background-image: url('${getAnimalImage(a.animal_name, a.image_url)}')"></div>
                 <div>
                     <p class="font-bold text-sm">${a.animal_name}</p>
                     <p class="text-xs text-slate-500">${a.species}</p>
@@ -192,8 +204,9 @@ document.getElementById('update-form').addEventListener('submit', async (e) => {
     btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:3px;"></div> Updating...';
 
     try {
-        await updateAnimalCount(id, count);
-        showToast('Animal count updated successfully!', 'success');
+        const imageUrl = document.getElementById('update-image-url').value.trim();
+        await updateAnimalCount(id, count, imageUrl);
+        showToast('Animal updated successfully!', 'success');
         await loadAnimals();
         showAnimalInfo(id);
     } catch (err) {

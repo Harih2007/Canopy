@@ -42,13 +42,13 @@ router.get('/:id', async (req, res) => {
 // POST /api/animals - Add new animal (auth required)
 router.post('/', authenticateToken, async (req, res) => {
     try {
-        const { animal_name, species, enclosure, count } = req.body;
+        const { animal_name, species, enclosure, count, image_url } = req.body;
         if (!animal_name || !species || !enclosure) {
             return res.status(400).json({ error: 'animal_name, species, and enclosure are required' });
         }
         const [result] = await pool.query(
-            'INSERT INTO animals (animal_name, species, enclosure, count) VALUES (?, ?, ?, ?)',
-            [animal_name, species, enclosure, count || 1]
+            'INSERT INTO animals (animal_name, species, enclosure, count, image_url) VALUES (?, ?, ?, ?, ?)',
+            [animal_name, species, enclosure, count || 1, image_url || null]
         );
         const [newAnimal] = await pool.query('SELECT * FROM animals WHERE id = ?', [result.insertId]);
         res.status(201).json(newAnimal[0]);
@@ -60,10 +60,10 @@ router.post('/', authenticateToken, async (req, res) => {
 // PUT /api/animals/:id - Update animal (auth required)
 router.put('/:id', authenticateToken, async (req, res) => {
     try {
-        const { animal_name, species, enclosure, count } = req.body;
+        const { animal_name, species, enclosure, count, image_url } = req.body;
         const [result] = await pool.query(
-            'UPDATE animals SET animal_name = ?, species = ?, enclosure = ?, count = ? WHERE id = ?',
-            [animal_name, species, enclosure, count, req.params.id]
+            'UPDATE animals SET animal_name = ?, species = ?, enclosure = ?, count = ?, image_url = ? WHERE id = ?',
+            [animal_name, species, enclosure, count, image_url || null, req.params.id]
         );
         if (result.affectedRows === 0) return res.status(404).json({ error: 'Animal not found' });
         const [updated] = await pool.query('SELECT * FROM animals WHERE id = ?', [req.params.id]);
@@ -76,16 +76,24 @@ router.put('/:id', authenticateToken, async (req, res) => {
 // PUT /api/animals/update-count/:id - Update only count (auth required)
 router.put('/update-count/:id', authenticateToken, async (req, res) => {
     try {
-        const { count } = req.body;
+        const { count, image_url } = req.body;
         if (count === undefined || count === null) {
             return res.status(400).json({ error: 'count is required' });
         }
-        const [result] = await pool.query(
-            'UPDATE animals SET count = ? WHERE id = ?',
-            [count, req.params.id]
-        );
-        if (result.affectedRows === 0) return res.status(404).json({ error: 'Animal not found' });
+        // Update count and optionally image_url
+        if (image_url !== undefined) {
+            await pool.query(
+                'UPDATE animals SET count = ?, image_url = ? WHERE id = ?',
+                [count, image_url || null, req.params.id]
+            );
+        } else {
+            await pool.query(
+                'UPDATE animals SET count = ? WHERE id = ?',
+                [count, req.params.id]
+            );
+        }
         const [updated] = await pool.query('SELECT * FROM animals WHERE id = ?', [req.params.id]);
+        if (updated.length === 0) return res.status(404).json({ error: 'Animal not found' });
         res.json(updated[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
