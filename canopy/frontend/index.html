@@ -249,6 +249,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="aspect-square w-full rounded-2xl overflow-hidden relative shadow-lg">
                     <img class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500" 
                          src="${getAnimalImage(animal.animal_name, animal.image_url)}" 
+                         data-animal="${animal.image_url ? '' : animal.animal_name}"
                          alt="${animal.animal_name}"/>
                     <div class="absolute top-3 right-3 bg-white/90 dark:bg-black/80 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-primary">${statuses[i % statuses.length]}</div>
                 </div>
@@ -262,6 +263,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             </div>
         `).join('');
+
+        // Resolve any unknown animal images via Wikipedia API
+        resolveAnimalImages();
 
         // Update stats
         const totalAnimals = animals.reduce((sum, a) => sum + a.count, 0);

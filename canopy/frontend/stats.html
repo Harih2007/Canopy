@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="group bg-white dark:bg-slate-900 rounded-2xl border border-primary/5 shadow-sm overflow-hidden card-hover fade-in" style="animation-delay: ${i * 80}ms">
                 <div class="aspect-[4/3] w-full relative overflow-hidden">
                     <img class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                         src="${getAnimalImage(animal.animal_name)}" alt="${animal.animal_name}"/>
+                         src="${getAnimalImage(animal.animal_name, animal.image_url)}" data-animal="${animal.image_url ? '' : animal.animal_name}" alt="${animal.animal_name}"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                     <div class="absolute top-3 right-3">
                         <span class="px-3 py-1 ${badge.colorClass} text-xs font-bold rounded-full">${badge.status}</span>
@@ -157,6 +157,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             </div>`;
         }).join('');
+
+        // Resolve any unknown animal images via Wikipedia API
+        resolveAnimalImages();
     } catch (err) {
         document.getElementById('animal-cards').innerHTML = '<p class="col-span-full text-center text-slate-500 py-12">Unable to load data. Ensure server is running.</p>';
     }

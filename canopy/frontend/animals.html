@@ -93,6 +93,7 @@
 <thead>
 <tr class="bg-primary/5 dark:bg-primary/20 border-b border-primary/10">
 <th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Animal ID</th>
+<th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Image</th>
 <th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Name</th>
 <th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Species</th>
 <th class="px-6 py-4 text-primary text-sm font-bold uppercase tracking-wider">Enclosure</th>
@@ -199,6 +200,9 @@ function renderAnimals(animals) {
     table.innerHTML = animals.map(animal => `
         <tr class="hover:bg-primary/5 dark:hover:bg-primary/5 transition-colors group fade-in">
             <td class="px-6 py-5 text-slate-500 dark:text-slate-400 font-mono text-sm">#A-${String(animal.id).padStart(4, '0')}</td>
+            <td class="px-6 py-5">
+                <div class="size-10 rounded-lg bg-cover bg-center border border-primary/10" style="background-image: url('${getAnimalImage(animal.animal_name, animal.image_url)}')" data-animal-bg="${animal.image_url ? '' : animal.animal_name}"></div>
+            </td>
             <td class="px-6 py-5 font-semibold text-slate-900 dark:text-slate-100">${animal.animal_name}</td>
             <td class="px-6 py-5">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
@@ -221,6 +225,9 @@ function renderAnimals(animals) {
     `).join('');
 
     document.getElementById('animals-count').textContent = `Showing ${animals.length} of ${allAnimals.length} animals`;
+
+    // Resolve any unknown animal images via Wikipedia API
+    resolveAnimalImages();
 }
 
 async function deleteAnimalRow(id, name) {

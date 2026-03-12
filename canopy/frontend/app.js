@@ -148,11 +148,48 @@ function formatDate(dateStr) {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-// Dynamic image generation — uses custom image_url if provided, otherwise fetches from loremflickr
+// Image logic — all animals have image_url stored in the database (fetched from Wikipedia)
+// Admin can override by pasting a custom URL. New animals without image_url get auto-resolved.
 function getAnimalImage(animalName, imageUrl) {
-    if (imageUrl && imageUrl.length > 0) return imageUrl;
-    const slug = animalName.toLowerCase().replace(/\s+/g, '-');
-    return `https://loremflickr.com/800/500/${slug}`;
+    // Use the database image_url (either admin-set or Wikipedia-fetched)
+    if (imageUrl && imageUrl.trim().length > 0) return imageUrl.trim();
+
+    // Fallback for any animal without a stored image
+    return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="800" height="500" fill="%231f7a63"/><text x="400" y="250" font-family="sans-serif" font-size="22" fill="white" text-anchor="middle">' + animalName + '</text></svg>');
+}
+
+// Cache for Wikipedia image lookups
+const wikiImageCache = {};
+
+// Fetch the main image for an animal from Wikipedia REST API
+async function fetchWikipediaImage(animalName) {
+    if (wikiImageCache[animalName]) return wikiImageCache[animalName];
+    try {
+        const resp = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(animalName)}`);
+        if (!resp.ok) return null;
+        const data = await resp.json();
+        const url = data.thumbnail ? data.thumbnail.source.replace(/\/\d+px-/, '/800px-') : null;
+        if (url) wikiImageCache[animalName] = url;
+        return url;
+    } catch { return null; }
+}
+
+// Call this after rendering cards to replace placeholder images with real Wikipedia images
+async function resolveAnimalImages() {
+    // Fix <img> elements
+    document.querySelectorAll('img[data-animal]').forEach(async (img) => {
+        const name = img.dataset.animal;
+        if (!name) return; // skip admin-provided images
+        const url = await fetchWikipediaImage(name);
+        if (url) img.src = url;
+    });
+    // Fix background-image elements
+    document.querySelectorAll('[data-animal-bg]').forEach(async (el) => {
+        const name = el.dataset.animalBg;
+        if (!name) return; // skip admin-provided images
+        const url = await fetchWikipediaImage(name);
+        if (url) el.style.backgroundImage = `url('${url}')`;
+    });
 }
 
 function getStatusBadge(animalName) {

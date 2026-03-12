@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <tr>
                 <td class="px-8 py-5">
                     <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-lg bg-cover bg-center border border-primary/10" style="background-image: url('${getAnimalImage(a.animal_name, a.image_url)}')"></div>
+                        <div class="size-10 rounded-lg bg-cover bg-center border border-primary/10" style="background-image: url('${getAnimalImage(a.animal_name, a.image_url)}')" data-animal-bg="${a.image_url ? '' : a.animal_name}"></div>
                         <span class="font-bold">${a.animal_name}</span>
                     </div>
                 </td>
@@ -241,6 +241,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td class="px-8 py-5 text-sm text-slate-600 dark:text-slate-400">${formatDate(a.last_updated)}</td>
             </tr>
         `).join('');
+
+        // Resolve any unknown animal images via Wikipedia API
+        resolveAnimalImages();
     } catch (err) {
         console.error(err);
         showToast('Failed to load dashboard data', 'error');
