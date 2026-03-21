@@ -55,6 +55,9 @@ async function apiFetch(endpoint, options = {}) {
     const data = await response.json();
 
     if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+            logout();
+        }
         throw new Error(data.error || 'Request failed');
     }
 
@@ -152,7 +155,14 @@ function formatDate(dateStr) {
 // Admin can override by pasting a custom URL. New animals without image_url get auto-resolved.
 function getAnimalImage(animalName, imageUrl) {
     // Use the database image_url (either admin-set or Wikipedia-fetched)
-    if (imageUrl && imageUrl.trim().length > 0) return imageUrl.trim();
+    if (imageUrl && imageUrl.trim().length > 0) {
+        const url = imageUrl.trim();
+        // Proxy external images through our backend to avoid CORS issues
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+        }
+        return url;
+    }
 
     // Fallback for any animal without a stored image
     return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="800" height="500" fill="%231f7a63"/><text x="400" y="250" font-family="sans-serif" font-size="22" fill="white" text-anchor="middle">' + animalName + '</text></svg>');

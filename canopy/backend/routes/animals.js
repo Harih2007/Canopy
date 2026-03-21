@@ -12,7 +12,10 @@ function authenticateToken(req, res, next) {
     if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ error: 'Invalid or expired token.' });
+        if (err) {
+            console.error(`AUTH ERROR: Token=${token.substring(0, 10)}... Error=${err.message}`);
+            return res.status(403).json({ error: 'Invalid or expired token.' });
+        }
         req.user = user;
         next();
     });
@@ -80,22 +83,28 @@ router.put('/update-count/:id', authenticateToken, async (req, res) => {
         if (count === undefined || count === null) {
             return res.status(400).json({ error: 'count is required' });
         }
+        console.log(`Updating animal ${req.params.id}: count=${count}, image_url=${image_url}`);
+        
         // Update count and optionally image_url
         if (image_url !== undefined) {
-            await pool.query(
+            const [result] = await pool.query(
                 'UPDATE animals SET count = ?, image_url = ? WHERE id = ?',
                 [count, image_url || null, req.params.id]
             );
+            console.log(`Update result: affectedRows=${result.affectedRows}`);
         } else {
-            await pool.query(
+            const [result] = await pool.query(
                 'UPDATE animals SET count = ? WHERE id = ?',
                 [count, req.params.id]
             );
+            console.log(`Update result: affectedRows=${result.affectedRows}`);
         }
         const [updated] = await pool.query('SELECT * FROM animals WHERE id = ?', [req.params.id]);
         if (updated.length === 0) return res.status(404).json({ error: 'Animal not found' });
+        console.log(`Updated animal data:`, updated[0]);
         res.json(updated[0]);
     } catch (err) {
+        console.error('Update error:', err);
         res.status(500).json({ error: err.message });
     }
 });
